@@ -97,6 +97,10 @@ func (c Container) Links() []string {
 	return links
 }
 
+func (c Container) NetworkMode() string {
+	return string(c.containerInfo.HostConfig.NetworkMode)
+}
+
 // IsWatchtower returns a boolean flag indicating whether or not the current
 // container is the watchtower container itself. The watchtower container is
 // identified by the presence of the "com.centurylinklabs.watchtower" label in

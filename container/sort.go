@@ -2,6 +2,7 @@ package container
 
 import (
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -72,6 +73,16 @@ func (ds *dependencySorter) visit(c Container) error {
 		if linkedContainer := ds.findUnvisited(linkName); linkedContainer != nil {
 			if err := ds.visit(*linkedContainer); err != nil {
 				return err
+			}
+		}
+	}
+	if mode := c.NetworkMode(); mode != "" {
+		if strings.HasPrefix("mode", "service:") {
+			service := strings.TrimSpace(strings.TrimPrefix("mode", "service:"))
+			if linkedContainer := ds.findUnvisited(service); linkedContainer != nil {
+				if err := ds.visit(*linkedContainer); err != nil {
+					return err
+				}
 			}
 		}
 	}
